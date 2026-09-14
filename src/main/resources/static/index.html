@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">F</div>
+            <div>
+                <strong>FitTrack</strong>
+                <span>Training log</span>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a href="#dashboard" class="nav-link active" data-view-link="dashboard">Dashboard</a>
+            <a href="#workouts" class="nav-link" data-view-link="workouts">Workouts</a>
+            <a href="#exercises" class="nav-link" data-view-link="exercises">Exercises</a>
+        </nav>
+
+        <div class="user-panel">
+            <span id="sessionLabel">Signed out</span>
+            <button id="logoutButton" class="ghost-button hidden" type="button">Sign out</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <section id="authView" class="auth-layout">
+            <div class="auth-copy">
+                <p class="eyebrow">Personal fitness tracker</p>
+                <h1>FitTrack</h1>
+                <p>Plan sessions, log sets, and see how your training load is moving.</p>
+                <div class="auth-highlights" aria-label="FitTrack highlights">
+                    <span>Workout history</span>
+                    <span>Exercise library</span>
+                    <span>Volume tracking</span>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <div class="tab-list" role="tablist" aria-label="Authentication options">
+                    <button class="tab-button active" type="button" data-auth-tab="login">Login</button>
+                    <button class="tab-button" type="button" data-auth-tab="register">Register</button>
+                </div>
+                <p id="authHint" class="form-hint">Welcome back. Pick up where your last session left off.</p>
+
+                <form id="loginForm" class="form-stack">
+                    <label>
+                        Username
+                        <input name="username" autocomplete="username" required>
+                    </label>
+                    <label>
+                        Password
+                        <input name="password" type="password" autocomplete="current-password" required>
+                    </label>
+                    <button class="primary-button" type="submit">Login</button>
+                </form>
+
+                <form id="registerForm" class="form-stack hidden">
+                    <label>
+                        Username
+                        <input name="username" autocomplete="username" required>
+                    </label>
+                    <label>
+                        Email
+                        <input name="email" type="email" autocomplete="email" required>
+                    </label>
+                    <label>
+                        Password
+                        <input name="password" type="password" autocomplete="new-password" required>
+                    </label>
+                    <button class="primary-button" type="submit">Create account</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="appView" class="hidden">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow" id="todayLabel">Today</p>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <button class="secondary-button" type="button" data-go-view="workouts">New workout</button>
+                    <button id="refreshButton" class="secondary-button" type="button">Refresh</button>
+                </div>
+            </header>
+
+            <section id="dashboardView" class="view active">
+                <div class="metric-grid">
+                    <article class="metric-card">
+                        <span>Total workouts</span>
+                        <strong id="totalWorkouts">0</strong>
+                        <small>Logged sessions</small>
+                    </article>
+                    <article class="metric-card">
+                        <span>Exercises</span>
+                        <strong id="totalExercises">0</strong>
+                        <small>In your library</small>
+                    </article>
+                    <article class="metric-card">
+                        <span>Recent volume</span>
+                        <strong id="recentVolume">0 kg</strong>
+                        <small>Last 5 workouts</small>
+                    </article>
+                </div>
+
+                <div class="content-grid">
+                    <section>
+                        <div class="section-heading">
+                            <h2>Recent workouts</h2>
+                            <button class="text-button" type="button" data-go-view="workouts">View all</button>
+                        </div>
+                        <div id="recentWorkoutList" class="list-stack"></div>
+                    </section>
+
+                    <section>
+                        <div class="section-heading">
+                            <h2>Muscle groups</h2>
+                        </div>
+                        <div id="muscleGroupList" class="chip-grid"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="workoutsView" class="view">
+                <div class="split-layout">
+                    <section class="panel">
+                        <div class="section-heading">
+                            <h2>New workout</h2>
+                        </div>
+                        <form id="workoutForm" class="form-stack">
+                            <label>
+                                Name
+                                <input name="name" placeholder="Push day" required>
+                            </label>
+                            <label>
+                                Date and time
+                                <input name="workoutDate" type="datetime-local">
+                            </label>
+                            <label>
+                                Notes
+                                <textarea name="notes" rows="3" placeholder="How did it feel?"></textarea>
+                            </label>
+
+                            <div class="exercise-builder">
+                                <div class="section-heading compact">
+                                    <h3>Exercises</h3>
+                                    <button id="addWorkoutExerciseButton" class="secondary-button" type="button">Add row</button>
+                                </div>
+                                <p class="form-hint">Each row contributes to workout volume: sets x reps x weight.</p>
+                                <div id="workoutExerciseRows" class="builder-rows"></div>
+                            </div>
+
+                            <button class="primary-button" type="submit">Save workout</button>
+                        </form>
+                    </section>
+
+                    <section>
+                        <div class="section-heading">
+                            <h2>Workout history</h2>
+                        </div>
+                        <div id="workoutList" class="list-stack"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="exercisesView" class="view">
+                <div class="split-layout">
+                    <section class="panel">
+                        <div class="section-heading">
+                            <h2>Add exercise</h2>
+                        </div>
+                        <form id="exerciseForm" class="form-stack">
+                            <label>
+                                Name
+                                <input name="name" placeholder="Bench press" required>
+                            </label>
+                            <label>
+                                Muscle group
+                                <input name="muscleGroup" placeholder="Chest">
+                            </label>
+                            <label>
+                                Description
+                                <textarea name="description" rows="4" placeholder="Setup, cues, or notes"></textarea>
+                            </label>
+                            <button class="primary-button" type="submit">Add exercise</button>
+                        </form>
+                    </section>
+
+                    <section>
+                        <div class="section-heading">
+                            <h2>Exercise library</h2>
+                            <input id="exerciseSearch" class="search-input" placeholder="Search exercises">
+                        </div>
+                        <div id="exerciseList" class="exercise-grid"></div>
+                    </section>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<template id="workoutExerciseRowTemplate">
+    <div class="builder-row">
+        <select name="exerciseId" required></select>
+        <input name="sets" type="number" min="1" placeholder="Sets" aria-label="Sets" required>
+        <input name="reps" type="number" min="1" placeholder="Reps" aria-label="Reps" required>
+        <input name="weight" type="number" min="0" step="0.5" placeholder="Kg" aria-label="Weight in kilograms" required>
+        <button class="icon-button" type="button" data-remove-row aria-label="Remove exercise row">x</button>
+    </div>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>
